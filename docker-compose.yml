@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: skrepai-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3051:3051"
+    environment:
+      - MONGODB_URL=mongodb://root:examplepassword@mongo:27019
+    depends_on:
+      - mongo
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+  mongo:
+    container_name: skrepai-mongo-db
+    image: mongo:latest
+    ports:
+      - "27019:27019"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=examplepassword
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
+
